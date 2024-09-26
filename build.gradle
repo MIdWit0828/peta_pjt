@@ -47,3 +47,11 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+task customJar(type: Jar) {
+    // JAR 파일을 저장할 경로 지정
+    destinationDirectory = file("${projectDir}/output")
+
+    // 필요한 경우: 추가로 jar 파일에 포함할 내용 설정
+    from sourceSets.main.output
+}
