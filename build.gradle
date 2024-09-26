@@ -51,7 +51,7 @@ tasks.named('test') {
 task customJar(type: Jar) {
     manifest {
         attributes(
-                'Main-Class': 'prs/midwit/PetaProject/PetaProjectApplication.java' // 실제 Main 클래스의 패키지와 이름
+                'Main-Class': 'prs/midwit/PetaProject/PetaProjectApplication' // 실제 Main 클래스의 패키지와 이름
         )
     }
     // JAR 파일을 저장할 경로 지정
