@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import prs.midwit.PetaProject.auth.common.exception.NotFoundException;
 import prs.midwit.PetaProject.auth.dto.LoginDto;
+import prs.midwit.PetaProject.member.domain.entity.Card;
 import prs.midwit.PetaProject.member.domain.entity.Member;
 import prs.midwit.PetaProject.member.domain.repo.MemberRepository;
 import prs.midwit.PetaProject.member.dto.req.MemberSignupRequest;
@@ -19,16 +20,21 @@ import static prs.midwit.PetaProject.auth.common.exception.type.ExceptionCode.NO
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final CardService cardService;
     private final PasswordEncoder passwordEncoder;
     public void signup(final MemberSignupRequest memberRequest) {
 
         final Member newMember = Member.of(
                 memberRequest.getMemberId(),
                 passwordEncoder.encode(memberRequest.getMemberPassword()),
+                memberRequest.getMemberName(),
                 memberRequest.getMemberEmail()
         );
 
-        memberRepository.save(newMember);
+        Member member =  memberRepository.save(newMember);
+//        Card newCard = Card.simpleOf(member.getMemberCode().toString(), memberRequest.getMemberName());
+//        cardService.save(newCard);
+
     }
 
     @Transactional(readOnly = true)

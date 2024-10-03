@@ -18,7 +18,7 @@ public class ProfileResponse {
         return new ProfileResponse(
                 member.getMemberId(),
                 member.getMemberName(),
-                member.getMemberEmail()
+                member.getEmail()
         );
     }
 }

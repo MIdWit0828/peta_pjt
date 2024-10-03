@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS `tbl_attachment`;
+DROP TABLE IF EXISTS `tbl_auth_member`;
+DROP TABLE IF EXISTS `tbl_auth-member`;
+DROP TABLE IF EXISTS `tbl_authority`;
+DROP TABLE IF EXISTS `tbl_card`;
+DROP TABLE IF EXISTS `tbl_data`;
+DROP TABLE IF EXISTS `tbl_data_access_level`;
+DROP TABLE IF EXISTS `tbl_data_category`;
+DROP TABLE IF EXISTS `tbl_member`;

@@ -19,7 +19,7 @@ public class LoginDto {
         return new LoginDto(
                 member.getMemberCode(),
                 member.getMemberId(),
-                member.getMemberPassword(),
+                member.getMemberPwd(),
                 member.getMemberRole()
         );
     }
