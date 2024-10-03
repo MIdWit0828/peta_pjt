@@ -25,7 +25,6 @@ public class MemberService {
         final Member newMember = Member.of(
                 memberRequest.getMemberId(),
                 passwordEncoder.encode(memberRequest.getMemberPassword()),
-                memberRequest.getMemberName(),
                 memberRequest.getMemberEmail()
         );
 

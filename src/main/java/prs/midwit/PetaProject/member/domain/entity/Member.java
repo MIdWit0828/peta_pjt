@@ -5,8 +5,11 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import prs.midwit.PetaProject.member.domain.type.MemberRole;
+
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "tbl_member")
@@ -15,28 +18,35 @@ import prs.midwit.PetaProject.member.domain.type.MemberRole;
 @EntityListeners(AuditingEntityListener.class)
 public class Member {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long memberCode;
+    @GeneratedValue(generator = "uuids")
+//    @GenericGenerator(name= "uuid2",strategy = "uuid")
+    private String memberCode;
     private String memberId;
-    private String memberPassword;
-    private String memberName;
-    private String memberEmail;
-    @Enumerated(value = EnumType.STRING)
-    private MemberRole memberRole = MemberRole.USER;
+    private String memberPwd;
+    private String email;
+    private String phone;
+    private String attachmentCode;
+    @GeneratedValue
+    private LocalDate regDt;
+    private LocalDate delDt;
+    private boolean isDelete;
     private String refreshToken;
 
-    public Member(String memberId, String memberPassword, String memberName, String memberEmail) {
+    public Member(String memberId, String memberPassword, String email) {
         this.memberId = memberId;
-        this.memberPassword = memberPassword;
-        this.memberName = memberName;
-        this.memberEmail = memberEmail;
+        this.memberPwd = memberPassword;
+        this.email = email;
     }
 
-    public static Member of(String memberId, String memberPassword, String memberName, String memberEmail) {
+    @PrePersist
+    protected void onCreate() {
+        this.regDt = LocalDate.now();
+    }
+
+    public static Member of(String memberId, String memberPassword, String memberEmail) {
         return new Member(
                 memberId,
                 memberPassword,
-                memberName,
                 memberEmail
         );
     }
