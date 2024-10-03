@@ -13,4 +13,21 @@ public class Attachment {
     private String safeName;
     private String filePath;
     private FileType fileType;
+
+    public Attachment(String originalFilename, String safeName, String finalDir, FileType fileType) {
+        this.originName = originalFilename;
+        this.safeName = safeName;
+        this.filePath = finalDir;
+        this.fileType = fileType;
+    }
+
+    public static Attachment of(String originalFilename, String safeName, String finalDir, String fileType) {
+        return new Attachment(
+                originalFilename,
+                safeName,
+                finalDir,
+                FileType.valueOf(fileType)
+        );
+    }
+
 }
