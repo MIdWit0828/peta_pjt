@@ -13,21 +13,21 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class Card {
     @Id
-    @GeneratedValue(generator = "uuids")
-    private String cardCode;
-    private String memberCode;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long cardCode;
+    private Long memberCode;
     private String memberName;
     private String groupName;
     private String positionName;
     private String address;
     private String securityCode;
 
-    public Card(String memberCode, String memberName) {
+    public Card(Long memberCode, String memberName) {
         this.memberCode = memberCode;
         this.memberName = memberName;
     }
 
-    public static Card simpleOf(String memberCode, String memberName) {
+    public static Card simpleOf(Long memberCode, String memberName) {
         return new Card(memberCode, memberName);
     }
 }

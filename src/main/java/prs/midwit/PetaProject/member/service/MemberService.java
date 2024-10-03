@@ -32,8 +32,8 @@ public class MemberService {
         );
 
         Member member =  memberRepository.save(newMember);
-//        Card newCard = Card.simpleOf(member.getMemberCode().toString(), memberRequest.getMemberName());
-//        cardService.save(newCard);
+        Card newCard = Card.simpleOf(member.getMemberCode(), memberRequest.getMemberName());
+        cardService.save(newCard);
 
     }
 

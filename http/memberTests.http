@@ -7,9 +7,9 @@ POST http://localhost:8001/api/v1/members/signup
 Content-Type: application/json
 
 {
-  "memberId": "testId1",
-  "memberPassword": "pass01",
-  "memberName": "새로운 이름",
+  "memberId": "testId2",
+  "memberPassword": "pass02",
+  "memberName": "새로운 이름22",
   "memberEmail": "aaa@aaa.com"
 }
 
