@@ -32,10 +32,10 @@ CREATE TABLE `tbl_card`
     `card_code`    INT NOT NULL AUTO_INCREMENT COMMENT '명함코드',
     `member_code`    INT NOT NULL COMMENT '맴버 코드',
     `member_name`    VARCHAR(50) NOT NULL COMMENT '이름',
-    `group_name`    VARCHAR(50) NOT NULL COMMENT '조직명',
-    `position_name`    VARCHAR(50) NOT NULL COMMENT '직함',
-    `address`    VARCHAR(100) NOT NULL COMMENT '주소',
-    `security_code`    VARCHAR(100) NOT NULL COMMENT '보안코드',
+    `group_name`    VARCHAR(50) COMMENT '조직명',
+    `position_name`    VARCHAR(50) COMMENT '직함',
+    `address`    VARCHAR(100) COMMENT '주소',
+    `security_code`    VARCHAR(100) COMMENT '보안코드',
     PRIMARY KEY ( `card_code` )
 ) COMMENT = '명함';
 
