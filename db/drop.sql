@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS `tbl_attachment`;
+DROP TABLE IF EXISTS petadb.`tbl_attachment`;
 DROP TABLE IF EXISTS `tbl_auth_member`;
 DROP TABLE IF EXISTS `tbl_auth-member`;
 DROP TABLE IF EXISTS `tbl_authority`;

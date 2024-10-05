@@ -5,6 +5,7 @@ CREATE TABLE `tbl_attachment`
     `safe_name`    VARCHAR(255) NOT NULL COMMENT '안전한 파일명',
     `file_path`    VARCHAR(255) NOT NULL COMMENT '파일 경로',
     `file_type`    VARCHAR(50) NOT NULL COMMENT '파일 구분',
+    `file_create_dt` DATETIME NOT NULL COMMENT '파일 업로드 시간',
     PRIMARY KEY ( `attachment_code` )
 ) COMMENT = '첨부파일';
 
