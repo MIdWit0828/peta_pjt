@@ -1,0 +1,7 @@
+### GET request to example server
+GET https://examples.http-client.intellij.net/get
+    ?generated-in=IntelliJ IDEA
+
+### 전체조회
+GET localhost:8001/api/v1/atts
+Access-Token: Bearer eyJkYXRlIjoxNzI4MTk3MjQ5NzUwLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsIm1lbWJlcklkIjoidGVzdElkMiIsIm1lbWJlclJvbGUiOiJST0xFX1VTRVIiLCJleHAiOjE3MjgyMDA4NDl9.D6ZF_Jv1fevYY2k4Db2ShTcyiNTMk2-mGtENvteXUy83GzfkwVuamjttTj3H1UE1xuOwAtNdcEYo5G68PNkfWA

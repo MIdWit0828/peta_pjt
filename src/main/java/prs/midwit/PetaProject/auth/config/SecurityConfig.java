@@ -54,16 +54,22 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     /* 클라이언트가 외부 도메인을 요청하는 경우 웹 브라우저에서 자체적으로 사전 요청(preflight)이 일어난다.
                      * 이 때 OPTIONS 메소드로 서버에 사전 요청을 보내 확인한다. */
-                    auth.requestMatchers(HttpMethod.OPTIONS, "/api/v1/atts/**").authenticated();
-                    auth.requestMatchers(HttpMethod.OPTIONS, "/api/v1/atts").authenticated();
-                    auth.requestMatchers(HttpMethod.POST, "api/v1/members/").permitAll();
+                    // 더 구체적인 규칙을 먼저 배치
+                    auth.requestMatchers(HttpMethod.POST, "/api/v1/atts/**").authenticated();
+                    auth.requestMatchers(HttpMethod.GET, "/api/v1/atts/**").authenticated();
+                    auth.requestMatchers(HttpMethod.GET, "/api/v1/atts").authenticated();
+
+                    // 로그인, 회원가입 등 POST 요청은 인증 없이 허용
+                    auth.requestMatchers(HttpMethod.POST, "/api/v1/members/").permitAll();
+
+                    // 그 외의 OPTIONS 요청은 모두 허용
                     auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
                     //                    auth.requestMatchers(HttpMethod.GET, "/productimgs/**").permitAll();
 //                    auth.requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll();
 //                    auth.requestMatchers(HttpMethod.POST, "/api/v1/members/signup", "/api/v1/members/login").permitAll();
 //                    auth.requestMatchers("/api/v1/products/*/reviews/**").authenticated();
 //                    auth.requestMatchers("/api/v1/products-management/**", "/api/v1/products/**").hasRole("ADMIN");
-                    auth.anyRequest().permitAll();
+//                    auth.anyRequest().permitAll();
                 })
                 /* 기본적으로 동작하는 로그인 필터 이전에 커스텀 로그인 필터를 설정한다. */
                 .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
@@ -83,7 +89,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000, /**"));
         corsConfiguration.setAllowedMethods(Arrays.asList("GET", "PUT", "POST", "DELETE"));
         corsConfiguration.setAllowedHeaders(Arrays.asList(
                 "Access-Control-Allow-Origin", "Access-Control-Allow-Headers",
