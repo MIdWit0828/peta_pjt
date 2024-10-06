@@ -56,13 +56,14 @@ public class SecurityConfig {
                      * 이 때 OPTIONS 메소드로 서버에 사전 요청을 보내 확인한다. */
                     auth.requestMatchers(HttpMethod.OPTIONS, "/api/v1/atts/**").authenticated();
                     auth.requestMatchers(HttpMethod.OPTIONS, "/api/v1/atts").authenticated();
+                    auth.requestMatchers(HttpMethod.POST, "api/v1/members/").permitAll();
                     auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
                     //                    auth.requestMatchers(HttpMethod.GET, "/productimgs/**").permitAll();
 //                    auth.requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll();
 //                    auth.requestMatchers(HttpMethod.POST, "/api/v1/members/signup", "/api/v1/members/login").permitAll();
 //                    auth.requestMatchers("/api/v1/products/*/reviews/**").authenticated();
 //                    auth.requestMatchers("/api/v1/products-management/**", "/api/v1/products/**").hasRole("ADMIN");
-//                    auth.anyRequest().permitAll();
+                    auth.anyRequest().permitAll();
                 })
                 /* 기본적으로 동작하는 로그인 필터 이전에 커스텀 로그인 필터를 설정한다. */
                 .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
