@@ -56,6 +56,7 @@ public class SecurityConfig {
                      * 이 때 OPTIONS 메소드로 서버에 사전 요청을 보내 확인한다. */
                     // 더 구체적인 규칙을 먼저 배치
                     auth.requestMatchers(HttpMethod.POST, "/api/v1/atts/**").authenticated();
+                    auth.requestMatchers(HttpMethod.POST, "/api/v1/atts/**/**").authenticated();
                     auth.requestMatchers(HttpMethod.GET, "/api/v1/atts/**").authenticated();
                     auth.requestMatchers(HttpMethod.GET, "/api/v1/atts").authenticated();
 

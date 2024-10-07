@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.jni.FileInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
@@ -37,6 +38,10 @@ public class AttController {
     private static final Logger log = LoggerFactory.getLogger(AttController.class);
     private final AttService attService;
 
+    @Value("${file.uploaded-dir}")
+    private String fileDir;
+
+
 
     @PostMapping("/atts/upload")
     public ResponseEntity<Void> upload(
@@ -44,7 +49,7 @@ public class AttController {
             @RequestPart final String fileType
     ) {
 
-        attService.save(file, fileType);
+        attService.save(file, fileType,fileDir);
 
 
         return ResponseEntity.ok().build();

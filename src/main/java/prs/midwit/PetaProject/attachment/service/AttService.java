@@ -1,6 +1,9 @@
 package prs.midwit.PetaProject.attachment.service;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,8 +26,9 @@ import java.util.UUID;
 @Transactional
 public class AttService {
 
+    private static final Logger log = LoggerFactory.getLogger(AttService.class);
     private final AttRepository attRepository;
-    private final String fileDir = "src/main/resources/file/";
+
 
     private String getRandomName() { return UUID.randomUUID().toString().replace("-", ""); }
 
@@ -32,7 +36,8 @@ public class AttService {
         return PageRequest.of(page - 1, 10, Sort.by("fileCreateDt").descending());
     }
 
-    public void save(MultipartFile file, String fileType) {
+    public void save(MultipartFile file, String fileType, String fileDir) {
+        log.info("저장소 위치...{}",fileDir);
         String finalDir = fileDir + fileType + "/";
         String safeName = getRandomName();
         Attachment attachment = Attachment.of(file.getOriginalFilename(), safeName, finalDir, fileType);
