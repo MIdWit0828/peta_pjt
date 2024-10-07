@@ -26,30 +26,39 @@ repositories {
 dependencies {
     implementation 'commons-io:commons-io:2.11.0'
 
+    // Spring Boot Starters
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-rest'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Lombok for reducing boilerplate code
     compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
+
+    // Development tools
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // Database connector
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // Testing dependencies
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-    implementation 'org.apache.poi:poi-ooxml:5.2.3'
-    implementation 'org.apache.poi:poi-ooxml-schemas:4.1.2'
+    // Apache POI for handling Word and PPT files
     implementation 'org.apache.poi:poi:5.2.3'
-    // Apache XMLBeans (required for POI)
-    implementation 'org.apache.xmlbeans:xmlbeans:5.1.1'
+    implementation 'org.apache.poi:poi-ooxml:5.2.3'
+    //implementation 'org.apache.poi:poi-ooxml-schemas:4.1.2' // 이 부분은 호환성 문제가 생길 수 있으니 제거해도 무방
+    implementation 'org.apache.xmlbeans:xmlbeans:5.1.1' // POI와 함께 사용하는 경우 필요
 
     // Thumbnailator for image processing
     implementation 'net.coobird:thumbnailator:0.4.14'
 
-
+    // JWT for token handling
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
@@ -57,17 +66,4 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
-}
-
-task customJar(type: Jar) {
-    manifest {
-        attributes(
-                'Main-Class': 'prs/midwit/PetaProject/PetaProjectApplication' // 실제 Main 클래스의 패키지와 이름
-        )
-    }
-    // JAR 파일을 저장할 경로 지정
-    destinationDirectory = file("${projectDir}/output")
-
-    // 필요한 경우: 추가로 jar 파일에 포함할 내용 설정
-    from sourceSets.main.output
 }

@@ -19,16 +19,26 @@ import org.springframework.web.multipart.MultipartFile;
 import prs.midwit.PetaProject.attachment.dto.AttDto;
 import prs.midwit.PetaProject.attachment.dto.res.AttListResponse;
 import prs.midwit.PetaProject.attachment.service.AttService;
+import prs.midwit.PetaProject.common.exception.BadRequestException;
 import prs.midwit.PetaProject.common.paging.Pagenation;
 import prs.midwit.PetaProject.common.paging.PagingButtonInfo;
 import prs.midwit.PetaProject.common.paging.PagingResponse;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
+
+import static prs.midwit.PetaProject.attachment.util.ImageConverter.convertSlideToImage;
+import static prs.midwit.PetaProject.attachment.util.ImageConverter.convertWordPageToImage;
+import static prs.midwit.PetaProject.common.exception.type.ExceptionCode.TYPE_DOSE_NOT_MATCH;
 
 @Controller
 @RequestMapping("api/v1")
@@ -73,16 +83,11 @@ public class AttController {
     ) {
         AttDto dto = attService.findAttByAttCode(fileCode);
 
-        int dotIndex = dto.getOriginName().lastIndexOf(".");
-        String extension = "";
-        if (dotIndex != -1) {
-            extension = dto.getOriginName().substring(dotIndex);
-        }
         try {
 
-            Path filePath = Paths.get(dto.getFilePath() + dto.getSafeName() + extension);
+            Path filePath = Paths.get(dto.getActualFilePath());
             Resource resource = new UrlResource(filePath.toUri());
-            log.info("{}",dto.getFilePath() + dto.getSafeName() + extension);
+            log.info("{}",dto.getActualFilePath());
 
             if (resource.exists()) {
                 String encodedFileName = URLEncoder.encode(dto.getOriginName(), StandardCharsets.UTF_8)
@@ -98,5 +103,52 @@ public class AttController {
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @GetMapping("/atts/word/{fileCode}/{pageNumber}")
+    public ResponseEntity<byte[]> getWordPageAsImage(@PathVariable Long fileCode, @PathVariable int pageNumber) throws IOException {
+
+        AttDto dto = attService.findAttByAttCode(fileCode);
+
+
+        //타입이 맞지 않을 경우 탈출
+        if (!Objects.equals(dto.getExtension(), ".doc") && !Objects.equals(dto.getExtension(), ".docx")) {
+            log.info("확인한 타입 : {}",dto.getExtension());
+            throw new BadRequestException(TYPE_DOSE_NOT_MATCH);
+        }
+
+        String filePath = dto.getActualFilePath();
+        BufferedImage image = convertWordPageToImage(filePath, pageNumber);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(image, "png", baos);
+        byte[] imageBytes = baos.toByteArray();
+
+        return ResponseEntity.ok()
+                             .header(HttpHeaders.CONTENT_TYPE, "image/png")
+                             .body(imageBytes);
+    }
+
+    @GetMapping("/atts/ppt/{fileCode}/{slideNumber}")
+    public ResponseEntity<byte[]> getSlideAsImage(@PathVariable Long fileCode, @PathVariable int slideNumber) throws IOException {
+
+        AttDto dto = attService.findAttByAttCode(fileCode);
+
+
+        //타입이 맞지 않을 경우 탈출
+        if (!Objects.equals(dto.getExtension(), ".ppt") && !Objects.equals(dto.getExtension(), ".pptx")) {
+            throw new BadRequestException(TYPE_DOSE_NOT_MATCH);
+        }
+        String filePath = dto.getActualFilePath();
+
+        BufferedImage image = convertSlideToImage(filePath, slideNumber);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(image, "png", baos);
+        byte[] imageBytes = baos.toByteArray();
+
+        return ResponseEntity.ok()
+                             .header(HttpHeaders.CONTENT_TYPE, "image/png")
+                             .body(imageBytes);
     }
 }

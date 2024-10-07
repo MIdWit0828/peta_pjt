@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API 테스트</title>
+    <script>
+        function sendRequest(method) {
+            const accessToken = document.getElementById("access-token").value;
+            const url = document.getElementById("url").value;
+            let body = null;
+
+            // POST 및 PUT 메서드의 경우, 요청 본문을 JSON으로 변환
+            if (method === "POST" || method === "PUT") {
+                const jsonBody = document.getElementById("request-body").value;
+                body = jsonBody ? JSON.stringify(JSON.parse(jsonBody)) : null;
+            }
+
+            // AJAX 요청
+            fetch(url, {
+                method: method,
+                headers: {
+                    "Authorization": `Bearer ${accessToken}`,
+                    "Content-Type": "application/json"
+                },
+                body: body
+            })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // 응답 데이터를 처리합니다.
+                        console.log(data);
+                        document.getElementById("result").innerText = JSON.stringify(data, null, 2);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        document.getElementById("result").innerText = `Error: ${error.message}`;
+                    });
+        }
+    </script>
+</head>
+<body>
+    <h1>API 테스트 페이지</h1>
+    <label for="access-token">Access-Token:</label>
+    <input type="text" id="access-token" placeholder="여기에 Access-Token 입력" />
+
+    <label for="url">URL:</label>
+    <input type="text" id="url" placeholder="API URL 입력" />
+
+    <h2>GET 요청</h2>
+    <button onclick="sendRequest('GET')">GET 요청 보내기</button>
+
+    <h2>POST 요청</h2>
+    <textarea id="request-body" placeholder='{"key": "value"}' rows="4" cols="50"
+              style="width: 100%;" title="JSON 형식으로 요청 본문을 입력하세요."></textarea>
+    <button onclick="sendRequest('POST')">POST 요청 보내기</button>
+
+    <h2>PUT 요청</h2>
+    <textarea id="request-body" placeholder='{"key": "value"}' rows="4" cols="50"
+              style="width: 100%;" title="JSON 형식으로 요청 본문을 입력하세요."></textarea>
+    <button onclick="sendRequest('PUT')">PUT 요청 보내기</button>
+
+    <h2>DELETE 요청</h2>
+    <button onclick="sendRequest('DELETE')">DELETE 요청 보내기</button>
+
+    <h2>응답 결과:</h2>
+    <pre id="result"></pre>
+</body>
+</html>

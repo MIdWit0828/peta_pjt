@@ -23,4 +23,16 @@ public class AttDto {
                 attachment.getFilePath()
         );
     }
+
+    public String getActualFilePath() {
+        return filePath + safeName + getExtension();
+    }
+    public String getExtension() {
+        int dotIndex = originName.lastIndexOf(".");
+        String extension = "";
+        if (dotIndex != -1) {
+            extension = originName.substring(dotIndex);
+        }
+        return extension;
+    }
 }
