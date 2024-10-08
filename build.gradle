@@ -12,6 +12,7 @@ java {
         languageVersion = JavaLanguageVersion.of(22)
     }
 }
+
 bootRun {
     jvmArgs = ['-Xms512m', '-Xmx2048m']  // 초기 힙 메모리 512MB, 최대 2048MB 설정
 }
@@ -24,11 +25,10 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven { url "https://repository.aspose.com/repo/" }
 }
 
 dependencies {
-    implementation 'commons-io:commons-io:2.11.0'
-
     // Spring Boot Starters
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -37,7 +37,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    // Lombok for reducing boilerplate code
+    // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
@@ -52,22 +52,34 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-    // Apache POI for handling Word and PPT files
+    // Apache POI
     implementation 'org.apache.poi:poi:5.2.3'
     implementation 'org.apache.poi:poi-ooxml:5.2.3'
-    //implementation 'org.apache.poi:poi-ooxml-schemas:4.1.2' // 이 부분은 호환성 문제가 생길 수 있으니 제거해도 무방
-    implementation 'org.apache.xmlbeans:xmlbeans:5.1.1' // POI와 함께 사용하는 경우 필요
+    implementation 'org.apache.xmlbeans:xmlbeans:5.1.1'
 
     // Apache PDFBox
     implementation 'org.apache.pdfbox:pdfbox:2.0.29'
 
-    // Thumbnailator for image processing
+    // Thumbnailator
     implementation 'net.coobird:thumbnailator:0.4.14'
 
-    // JWT for token handling
+    // JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    // Docx4j
+    implementation 'org.docx4j:docx4j:6.1.2'
+
+    // Flying Saucer
+    implementation 'org.xhtmlrenderer:flying-saucer-core:9.9.5'
+    implementation 'org.xhtmlrenderer:flying-saucer-pdf:9.9.5'
+
+    // Aspose.Words
+    implementation 'com.aspose:aspose-words:23.9:jdk17'
+
+    // Logback
+    implementation 'ch.qos.logback:logback-classic:1.4.5'
 }
 
 tasks.named('test') {

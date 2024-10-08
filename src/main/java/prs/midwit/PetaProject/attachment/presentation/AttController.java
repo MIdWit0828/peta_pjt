@@ -1,6 +1,7 @@
 package prs.midwit.PetaProject.attachment.presentation;
 
 
+import com.lowagie.text.DocumentException;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.jni.FileInfo;
 import org.slf4j.Logger;
@@ -26,6 +27,7 @@ import prs.midwit.PetaProject.common.paging.PagingButtonInfo;
 import prs.midwit.PetaProject.common.paging.PagingResponse;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -105,7 +107,7 @@ public class AttController {
     }
 
     @GetMapping("/atts/pre-view/{fileCode}/{pageNumber}")
-    public ResponseEntity<byte[]> getPreViewImage(@PathVariable Long fileCode, @PathVariable int pageNumber) throws IOException {
+    public ResponseEntity<byte[]> getPreViewImage(@PathVariable Long fileCode, @PathVariable int pageNumber) throws IOException, DocumentException, FontFormatException {
         AttDto dto = attService.findAttByAttCode(fileCode);
         String filePath = dto.getActualFilePath();
 
@@ -118,6 +120,7 @@ public class AttController {
             image = convertSlideToImage(filePath, pageNumber);
         } else if (Objects.equals(dto.getExtension(), ".doc") || Objects.equals(dto.getExtension(), ".docx")) {
             image = convertWordPageToImage(filePath, pageNumber);
+//            image = convertWordPageToImageAspose(filePath, pageNumber);
         } else {
             throw new BadRequestException(TYPE_DOSE_NOT_MATCH);
         }
@@ -130,77 +133,4 @@ public class AttController {
                              .header(HttpHeaders.CONTENT_TYPE, "image/png")
                              .body(imageBytes);
     }
-
-
-    // 밑 3코드 구버전
-    @GetMapping("/atts/word/{fileCode}/{pageNumber}")
-    public ResponseEntity<byte[]> getWordPageAsImage(@PathVariable Long fileCode, @PathVariable int pageNumber) throws IOException {
-
-        AttDto dto = attService.findAttByAttCode(fileCode);
-
-
-        //타입이 맞지 않을 경우 탈출
-        if (!Objects.equals(dto.getExtension(), ".doc") && !Objects.equals(dto.getExtension(), ".docx")) {
-            log.info("확인한 타입 : {}", dto.getExtension());
-            throw new BadRequestException(TYPE_DOSE_NOT_MATCH);
-        }
-
-        String filePath = dto.getActualFilePath();
-        BufferedImage image = convertWordPageToImage(filePath, pageNumber);
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(image, "png", baos);
-        byte[] imageBytes = baos.toByteArray();
-
-        return ResponseEntity.ok()
-                             .header(HttpHeaders.CONTENT_TYPE, "image/png")
-                             .body(imageBytes);
-    }
-
-    @GetMapping("/atts/ppt/{fileCode}/{slideNumber}")
-    public ResponseEntity<byte[]> getSlideAsImage(@PathVariable Long fileCode, @PathVariable int slideNumber) throws IOException {
-
-        AttDto dto = attService.findAttByAttCode(fileCode);
-
-
-        //타입이 맞지 않을 경우 탈출
-        if (!Objects.equals(dto.getExtension(), ".ppt") && !Objects.equals(dto.getExtension(), ".pptx")) {
-            throw new BadRequestException(TYPE_DOSE_NOT_MATCH);
-        }
-        String filePath = dto.getActualFilePath();
-
-        BufferedImage image = convertSlideToImage(filePath, slideNumber);
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(image, "png", baos);
-        byte[] imageBytes = baos.toByteArray();
-
-        return ResponseEntity.ok()
-                             .header(HttpHeaders.CONTENT_TYPE, "image/png")
-                             .body(imageBytes);
-    }
-
-    @GetMapping("/atts/pdf/{fileCode}/{pageNumber}")
-    public ResponseEntity<byte[]> getPdfAImage(@PathVariable Long fileCode, @PathVariable int pageNumber) throws IOException {
-        AttDto dto = attService.findAttByAttCode(fileCode);
-
-
-        //타입이 맞지 않을 경우 탈출
-        if (!Objects.equals(dto.getExtension(), ".pdf")) {
-            log.info(dto.getExtension());
-            throw new BadRequestException(TYPE_DOSE_NOT_MATCH);
-        }
-        String filePath = dto.getActualFilePath();
-
-        BufferedImage image = convertPdfPageToImage(filePath, pageNumber);
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(image, "png", baos);
-        byte[] imageBytes = baos.toByteArray();
-
-        return ResponseEntity.ok()
-                             .header(HttpHeaders.CONTENT_TYPE, "image/png")
-                             .body(imageBytes);
-    }
-
 }
