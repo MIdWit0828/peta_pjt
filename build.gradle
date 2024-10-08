@@ -12,6 +12,9 @@ java {
         languageVersion = JavaLanguageVersion.of(22)
     }
 }
+bootRun {
+    jvmArgs = ['-Xms512m', '-Xmx2048m']  // 초기 힙 메모리 512MB, 최대 2048MB 설정
+}
 
 configurations {
     compileOnly {
@@ -54,6 +57,9 @@ dependencies {
     implementation 'org.apache.poi:poi-ooxml:5.2.3'
     //implementation 'org.apache.poi:poi-ooxml-schemas:4.1.2' // 이 부분은 호환성 문제가 생길 수 있으니 제거해도 무방
     implementation 'org.apache.xmlbeans:xmlbeans:5.1.1' // POI와 함께 사용하는 경우 필요
+
+    // Apache PDFBox
+    implementation 'org.apache.pdfbox:pdfbox:2.0.29'
 
     // Thumbnailator for image processing
     implementation 'net.coobird:thumbnailator:0.4.14'

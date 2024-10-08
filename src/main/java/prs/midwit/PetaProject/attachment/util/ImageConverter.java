@@ -1,5 +1,8 @@
 package prs.midwit.PetaProject.attachment.util;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.rendering.ImageType;
+import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.apache.poi.xslf.usermodel.XSLFSlide;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -7,6 +10,7 @@ import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
@@ -51,6 +55,17 @@ public class ImageConverter {
             graphics.dispose();
 
             return img;
+        }
+    }
+
+    public static BufferedImage convertPdfPageToImage(String filePath, int pageNumber) throws IOException {
+        try (PDDocument document = PDDocument.load(new File(filePath))) {
+            if (pageNumber < 1 || pageNumber > document.getNumberOfPages()) {
+                return null;
+            }
+
+            PDFRenderer pdfRenderer = new PDFRenderer(document);
+            return pdfRenderer.renderImageWithDPI(pageNumber - 1, 150, ImageType.RGB);
         }
     }
 }

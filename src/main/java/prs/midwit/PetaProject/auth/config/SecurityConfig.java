@@ -60,13 +60,14 @@ public class SecurityConfig {
                     auth.requestMatchers(HttpMethod.GET, "/api/v1/atts/**").authenticated();
                     auth.requestMatchers(HttpMethod.GET, "/api/v1/atts/word/{fileCode}/{pageNumber}").authenticated();
                     auth.requestMatchers(HttpMethod.GET, "/api/v1/atts/ppt/{fileCode}/{pageNumber}").authenticated();
+                    auth.requestMatchers(HttpMethod.GET, "/api/v1/atts/pdf/{fileCode}/{pageNumber}").authenticated();
                     auth.requestMatchers(HttpMethod.GET, "/api/v1/atts").authenticated();
 
                     // 로그인, 회원가입 등 POST 요청은 인증 없이 허용
-                    auth.requestMatchers(HttpMethod.POST, "/api/v1/members/").permitAll();
+                    auth.requestMatchers(HttpMethod.POST, "/api/v1/members/login").permitAll();
+                    auth.requestMatchers(HttpMethod.POST, "/api/v1/members/signup").permitAll();
 
-                    // 그 외의 OPTIONS 요청은 모두 허용
-                    auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
+
                     //                    auth.requestMatchers(HttpMethod.GET, "/productimgs/**").permitAll();
 //                    auth.requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll();
 //                    auth.requestMatchers(HttpMethod.POST, "/api/v1/members/signup", "/api/v1/members/login").permitAll();

@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,8 +37,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 
-import static prs.midwit.PetaProject.attachment.util.ImageConverter.convertSlideToImage;
-import static prs.midwit.PetaProject.attachment.util.ImageConverter.convertWordPageToImage;
+import static prs.midwit.PetaProject.attachment.util.ImageConverter.*;
 import static prs.midwit.PetaProject.common.exception.type.ExceptionCode.TYPE_DOSE_NOT_MATCH;
 
 @Controller
@@ -52,14 +52,13 @@ public class AttController {
     private String fileDir;
 
 
-
     @PostMapping("/atts/upload")
     public ResponseEntity<Void> upload(
             @RequestPart final MultipartFile file,
             @RequestPart final String fileType
     ) {
 
-        attService.save(file, fileType,fileDir);
+        attService.save(file, fileType, fileDir);
 
 
         return ResponseEntity.ok().build();
@@ -87,7 +86,7 @@ public class AttController {
 
             Path filePath = Paths.get(dto.getActualFilePath());
             Resource resource = new UrlResource(filePath.toUri());
-            log.info("{}",dto.getActualFilePath());
+            log.info("{}", dto.getActualFilePath());
 
             if (resource.exists()) {
                 String encodedFileName = URLEncoder.encode(dto.getOriginName(), StandardCharsets.UTF_8)
@@ -113,7 +112,7 @@ public class AttController {
 
         //타입이 맞지 않을 경우 탈출
         if (!Objects.equals(dto.getExtension(), ".doc") && !Objects.equals(dto.getExtension(), ".docx")) {
-            log.info("확인한 타입 : {}",dto.getExtension());
+            log.info("확인한 타입 : {}", dto.getExtension());
             throw new BadRequestException(TYPE_DOSE_NOT_MATCH);
         }
 
@@ -142,6 +141,29 @@ public class AttController {
         String filePath = dto.getActualFilePath();
 
         BufferedImage image = convertSlideToImage(filePath, slideNumber);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(image, "png", baos);
+        byte[] imageBytes = baos.toByteArray();
+
+        return ResponseEntity.ok()
+                             .header(HttpHeaders.CONTENT_TYPE, "image/png")
+                             .body(imageBytes);
+    }
+
+    @GetMapping("/atts/pdf/{fileCode}/{pageNumber}")
+    public ResponseEntity<byte[]> getPdfAImage(@PathVariable Long fileCode, @PathVariable int pageNumber) throws IOException {
+        AttDto dto = attService.findAttByAttCode(fileCode);
+
+
+        //타입이 맞지 않을 경우 탈출
+        if (!Objects.equals(dto.getExtension(), ".pdf")) {
+            log.info(dto.getExtension());
+            throw new BadRequestException(TYPE_DOSE_NOT_MATCH);
+        }
+        String filePath = dto.getActualFilePath();
+
+        BufferedImage image = convertPdfPageToImage(filePath, pageNumber);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(image, "png", baos);
