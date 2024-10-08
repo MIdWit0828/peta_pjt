@@ -61,6 +61,7 @@ public class SecurityConfig {
                     auth.requestMatchers(HttpMethod.GET, "/api/v1/atts/word/{fileCode}/{pageNumber}").authenticated();
                     auth.requestMatchers(HttpMethod.GET, "/api/v1/atts/ppt/{fileCode}/{pageNumber}").authenticated();
                     auth.requestMatchers(HttpMethod.GET, "/api/v1/atts/pdf/{fileCode}/{pageNumber}").authenticated();
+                    auth.requestMatchers(HttpMethod.GET, "/api/v1/atts/pre-view/{fileCode}/{pageNumber}").authenticated();
                     auth.requestMatchers(HttpMethod.GET, "/api/v1/atts").authenticated();
 
                     // 로그인, 회원가입 등 POST 요청은 인증 없이 허용
