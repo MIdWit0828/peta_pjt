@@ -1,5 +1,6 @@
 package prs.midwit.PetaProject.common.exception.handler;
 
+import prs.midwit.PetaProject.common.exception.BadRequestException;
 import prs.midwit.PetaProject.common.exception.ConflictException;
 import prs.midwit.PetaProject.common.exception.NotFoundException;
 import prs.midwit.PetaProject.common.exception.ServerInternalException;
@@ -47,6 +48,13 @@ public class ExceptionHandlingController {
         String defaultMessage = e.getBindingResult().getFieldError().getDefaultMessage();
 
         final ExceptionResponse exceptionResponse = ExceptionResponse.of(9000, defaultMessage);
+
+        return ResponseEntity.badRequest().body(exceptionResponse);
+    }
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ExceptionResponse> BadRequestException(BadRequestException e) {
+
+        final ExceptionResponse exceptionResponse = ExceptionResponse.of(e.getCode(), e.getMessage());
 
         return ResponseEntity.badRequest().body(exceptionResponse);
     }

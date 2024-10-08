@@ -104,6 +104,35 @@ public class AttController {
         }
     }
 
+    @GetMapping("/atts/pre-view/{fileCode}/{pageNumber}")
+    public ResponseEntity<byte[]> getPreViewImage(@PathVariable Long fileCode, @PathVariable int pageNumber) throws IOException {
+        AttDto dto = attService.findAttByAttCode(fileCode);
+        String filePath = dto.getActualFilePath();
+
+        BufferedImage image;
+
+        log.info("조회한 파일의 확장자 : {}",dto.getExtension());
+        if (Objects.equals(dto.getExtension(), ".pdf")) {
+            image = convertPdfPageToImage(filePath, pageNumber);
+        } else if (Objects.equals(dto.getExtension(), ".ppt") || Objects.equals(dto.getExtension(), ".pptx")) {
+            image = convertSlideToImage(filePath, pageNumber);
+        } else if (Objects.equals(dto.getExtension(), ".doc") || Objects.equals(dto.getExtension(), ".docx")) {
+            image = convertWordPageToImage(filePath, pageNumber);
+        } else {
+            throw new BadRequestException(TYPE_DOSE_NOT_MATCH);
+        }
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(image, "png", baos);
+        byte[] imageBytes = baos.toByteArray();
+
+        return ResponseEntity.ok()
+                             .header(HttpHeaders.CONTENT_TYPE, "image/png")
+                             .body(imageBytes);
+    }
+
+
+    // 밑 3코드 구버전
     @GetMapping("/atts/word/{fileCode}/{pageNumber}")
     public ResponseEntity<byte[]> getWordPageAsImage(@PathVariable Long fileCode, @PathVariable int pageNumber) throws IOException {
 
@@ -173,4 +202,5 @@ public class AttController {
                              .header(HttpHeaders.CONTENT_TYPE, "image/png")
                              .body(imageBytes);
     }
+
 }
