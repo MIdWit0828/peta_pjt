@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.aspose.words.Document;
+import prs.midwit.PetaProject.common.exception.BadRequestException;
+
+import static prs.midwit.PetaProject.common.exception.type.ExceptionCode.PAGE_OVER_BAD_REQUEST;
 
 public class ImageConverter {
 
@@ -170,7 +173,7 @@ public class ImageConverter {
     public static BufferedImage convertPdfPageToImage(String filePath, int pageNumber) throws IOException {
         try (PDDocument document = PDDocument.load(new File(filePath))) {
             if (pageNumber < 1 || pageNumber > document.getNumberOfPages()) {
-                return null;
+                throw new IllegalArgumentException("Invalid page number");
             }
 
             PDFRenderer pdfRenderer = new PDFRenderer(document);

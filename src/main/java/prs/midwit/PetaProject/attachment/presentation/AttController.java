@@ -118,10 +118,13 @@ public class AttController {
             image = convertPdfPageToImage(filePath, pageNumber);
         } else if (Objects.equals(dto.getExtension(), ".ppt") || Objects.equals(dto.getExtension(), ".pptx")) {
             image = convertSlideToImage(filePath, pageNumber);
-        } else if (Objects.equals(dto.getExtension(), ".doc") || Objects.equals(dto.getExtension(), ".docx")) {
+        }
+        /*
+        else if (Objects.equals(dto.getExtension(), ".doc") || Objects.equals(dto.getExtension(), ".docx")) {
             image = convertWordPageToImage(filePath, pageNumber);
 //            image = convertWordPageToImageAspose(filePath, pageNumber);
-        } else {
+        } */
+        else {
             throw new BadRequestException(TYPE_DOSE_NOT_MATCH);
         }
 
