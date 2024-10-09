@@ -58,9 +58,7 @@ public class SecurityConfig {
                     auth.requestMatchers(HttpMethod.POST, "/api/v1/atts/**").authenticated();
 //                    auth.requestMatchers(HttpMethod.POST, "/api/v1/atts/**/**").authenticated();
                     auth.requestMatchers(HttpMethod.GET, "/api/v1/atts/**").authenticated();
-                    auth.requestMatchers(HttpMethod.GET, "/api/v1/atts/word/{fileCode}/{pageNumber}").authenticated();
-                    auth.requestMatchers(HttpMethod.GET, "/api/v1/atts/ppt/{fileCode}/{pageNumber}").authenticated();
-                    auth.requestMatchers(HttpMethod.GET, "/api/v1/atts/pdf/{fileCode}/{pageNumber}").authenticated();
+                    auth.requestMatchers(HttpMethod.DELETE, "/api/v1/atts/**").authenticated();
                     auth.requestMatchers(HttpMethod.GET, "/api/v1/atts/pre-view/{fileCode}/{pageNumber}").authenticated();
                     auth.requestMatchers(HttpMethod.GET, "/api/v1/atts").authenticated();
 

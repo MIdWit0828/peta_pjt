@@ -113,7 +113,7 @@ public class AttController {
 
         BufferedImage image;
 
-        log.info("조회한 파일의 확장자 : {}",dto.getExtension());
+        log.info("조회한 파일의 확장자 : {}", dto.getExtension());
         if (Objects.equals(dto.getExtension(), ".pdf")) {
             image = convertPdfPageToImage(filePath, pageNumber);
         } else if (Objects.equals(dto.getExtension(), ".ppt") || Objects.equals(dto.getExtension(), ".pptx")) {
@@ -135,5 +135,12 @@ public class AttController {
         return ResponseEntity.ok()
                              .header(HttpHeaders.CONTENT_TYPE, "image/png")
                              .body(imageBytes);
+    }
+
+    @DeleteMapping("/atts/{fileCode}")
+    public ResponseEntity<Void> deleteFile(@PathVariable Long fileCode) {
+        attService.delete(fileCode);
+
+        return ResponseEntity.noContent().build();
     }
 }

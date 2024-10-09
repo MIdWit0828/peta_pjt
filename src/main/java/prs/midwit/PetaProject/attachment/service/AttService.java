@@ -21,6 +21,8 @@ import prs.midwit.PetaProject.common.utils.FileUploadUtils;
 
 import java.util.UUID;
 
+import static prs.midwit.PetaProject.common.utils.FileUploadUtils.deleteFile;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -68,5 +70,18 @@ public class AttService {
         );
         return AttDto.from(attachment);
 
+    }
+
+    public void delete(Long fileCode) {
+        Attachment attachment = attRepository.findById(fileCode).orElseThrow(
+                ()-> new NotFoundException(ExceptionCode.NOT_FOUND_ATT_CODE)
+        );
+        int dotIndex = attachment.getOriginName().lastIndexOf(".");
+        String extension = "";
+        if (dotIndex != -1) {
+            extension = attachment.getOriginName().substring(dotIndex);
+        }
+        deleteFile(attachment.getFilePath(), attachment.getSafeName()+extension);
+        attRepository.delete(attachment);
     }
 }
