@@ -14,17 +14,21 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.parameters.P;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import prs.midwit.PetaProject.attachment.dto.AttDto;
 import prs.midwit.PetaProject.attachment.dto.res.AttListResponse;
 import prs.midwit.PetaProject.attachment.service.AttService;
+import prs.midwit.PetaProject.auth.dto.LoginDto;
 import prs.midwit.PetaProject.common.exception.BadRequestException;
 import prs.midwit.PetaProject.common.paging.Pagenation;
 import prs.midwit.PetaProject.common.paging.PagingButtonInfo;
 import prs.midwit.PetaProject.common.paging.PagingResponse;
+import prs.midwit.PetaProject.member.service.MemberService;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -49,6 +53,7 @@ public class AttController {
 
     private static final Logger log = LoggerFactory.getLogger(AttController.class);
     private final AttService attService;
+    private final MemberService memberService;
 
     @Value("${file.uploaded-dir}")
     private String fileDir;
@@ -57,10 +62,11 @@ public class AttController {
     @PostMapping("/atts/upload")
     public ResponseEntity<Void> upload(
             @RequestPart final MultipartFile file,
-            @RequestPart final String fileType
-    ) {
-
-        attService.save(file, fileType, fileDir);
+            @RequestPart final String fileType,
+            @AuthenticationPrincipal UserDetails userDetails
+            ) {
+        LoginDto loginDto = memberService.findByMemberId(userDetails.getUsername());
+        attService.save(file, fileType, fileDir,loginDto.getMemberCode());
 
 
         return ResponseEntity.ok().build();

@@ -13,8 +13,15 @@ import prs.midwit.PetaProject.attachment.domain.type.FileType;
 @AllArgsConstructor
 public class AttDto {
     private String originName;
+    private String memberName;
     private String safeName;
     private String filePath;
+
+    public AttDto(String originName, String safeName, String filePath) {
+        this.originName = originName;
+        this.safeName = safeName;
+        this.filePath = filePath;
+    }
 
     public static AttDto from(Attachment attachment) {
         return new AttDto(
@@ -27,6 +34,8 @@ public class AttDto {
     public String getActualFilePath() {
         return filePath + safeName + getExtension();
     }
+
+
     public String getExtension() {
         int dotIndex = originName.lastIndexOf(".");
         String extension = "";

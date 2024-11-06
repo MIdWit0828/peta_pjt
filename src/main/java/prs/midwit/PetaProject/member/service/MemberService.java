@@ -76,4 +76,10 @@ public class MemberService {
         return ProfileResponse.from(member);
 
     }
+
+    public String getMemberName(Long memberCode) {
+        Member member = memberRepository.findById(memberCode)
+                                        .orElseThrow(() -> new UsernameNotFoundException("해당 아이디가 존재하지 않습니다."));
+        return member.getMemberName();
+    }
 }

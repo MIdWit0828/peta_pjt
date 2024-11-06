@@ -15,15 +15,27 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class AttListResponse {
     private Long attCode;
+    private Long memberCode;
+    private String memberName;
     private String originName;
     private String filePath;
     private FileType fileType;
     @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime fileCreateTime;
 
+    public AttListResponse(Long attCode, Long memberCode, String originName, String filePath, FileType fileType, LocalDateTime fileCreateTime) {
+        this.attCode = attCode;
+        this.memberCode = memberCode;
+        this.originName = originName;
+        this.filePath = filePath;
+        this.fileType = fileType;
+        this.fileCreateTime = fileCreateTime;
+    }
+
     public static AttListResponse from(Attachment att) {
         return new AttListResponse(
               att.getAttachmentCode(),
+              att.getMemberCode(),
               att.getOriginName(),
               att.getFilePath(),
               att.getFileType(),

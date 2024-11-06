@@ -144,7 +144,7 @@ public class ImageConverter {
             List<XSLFSlide> slides = ppt.getSlides();
 
             if (slideNumber < 0 || slideNumber >= slides.size()) {
-                throw new IllegalArgumentException("Invalid slide number");
+                throw new BadRequestException(PAGE_OVER_BAD_REQUEST);
             }
             XSLFSlide slide = slides.get(slideNumber);
 
@@ -173,7 +173,7 @@ public class ImageConverter {
     public static BufferedImage convertPdfPageToImage(String filePath, int pageNumber) throws IOException {
         try (PDDocument document = PDDocument.load(new File(filePath))) {
             if (pageNumber < 1 || pageNumber > document.getNumberOfPages()) {
-                throw new IllegalArgumentException("Invalid page number");
+                throw new BadRequestException(PAGE_OVER_BAD_REQUEST);
             }
 
             PDFRenderer pdfRenderer = new PDFRenderer(document);

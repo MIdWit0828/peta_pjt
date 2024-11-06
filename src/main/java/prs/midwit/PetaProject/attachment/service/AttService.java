@@ -18,6 +18,7 @@ import prs.midwit.PetaProject.attachment.dto.res.AttListResponse;
 import prs.midwit.PetaProject.common.exception.NotFoundException;
 import prs.midwit.PetaProject.common.exception.type.ExceptionCode;
 import prs.midwit.PetaProject.common.utils.FileUploadUtils;
+import prs.midwit.PetaProject.member.service.MemberService;
 
 import java.util.UUID;
 
@@ -30,7 +31,7 @@ public class AttService {
 
     private static final Logger log = LoggerFactory.getLogger(AttService.class);
     private final AttRepository attRepository;
-
+    private final MemberService memberService;
 
     private String getRandomName() { return UUID.randomUUID().toString().replace("-", ""); }
 
@@ -38,11 +39,11 @@ public class AttService {
         return PageRequest.of(page - 1, 10, Sort.by("fileCreateDt").descending());
     }
 
-    public void save(MultipartFile file, String fileType, String fileDir) {
+    public void save(MultipartFile file, String fileType, String fileDir,Long memberCode) {
         log.info("저장소 위치...{}",fileDir);
         String finalDir = fileDir + fileType + "/";
         String safeName = getRandomName();
-        Attachment attachment = Attachment.of(file.getOriginalFilename(), safeName, finalDir, fileType);
+        Attachment attachment = Attachment.of(file.getOriginalFilename(),memberCode, safeName, finalDir, fileType);
 
         //디렉토리에 저장
         FileUploadUtils.saveFile(finalDir, safeName, file);
@@ -60,8 +61,13 @@ public class AttService {
         } else {
             atts = attRepository.findByFileType(getPageable(page),fileType);
         }
-
-        return atts.map(AttListResponse::from);
+        Page<AttListResponse> listResponses = atts.map(AttListResponse::from);
+        listResponses = listResponses.map(item -> {
+            String memberName = memberService.getMemberName(item.getMemberCode());
+            item.setMemberName(memberName);
+            return item;
+        });
+        return listResponses;
     }
 
     public AttDto findAttByAttCode(Long attachmentCode) {

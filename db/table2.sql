@@ -1,6 +1,7 @@
 CREATE TABLE `tbl_attachment`
 (
     `attachment_code`    INT NOT NULL AUTO_INCREMENT COMMENT '첨부파일 코드',
+    `member_code` INT NOT NULL COMMENT '작성자',
     `origin_name`    VARCHAR(255) NOT NULL COMMENT '본 파일명',
     `safe_name`    VARCHAR(255) NOT NULL COMMENT '안전한 파일명',
     `file_path`    VARCHAR(255) NOT NULL COMMENT '파일 경로',

@@ -2,6 +2,7 @@ package prs.midwit.PetaProject.attachment.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.apache.bcel.verifier.statics.LONG_Upper;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import prs.midwit.PetaProject.attachment.domain.type.FileType;
@@ -15,6 +16,7 @@ public class Attachment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long attachmentCode;
+    private Long memberCode;
     private String originName;
     private String safeName;
     private String filePath;
@@ -25,8 +27,9 @@ public class Attachment {
     @CreationTimestamp
     private LocalDateTime fileCreateDt;
 
-    public Attachment(String originalFilename, String safeName, String finalDir, FileType fileType) {
+    public Attachment(String originalFilename,Long memberCode, String safeName, String finalDir, FileType fileType) {
         this.originName = originalFilename;
+        this.memberCode = memberCode;
         this.safeName = safeName;
         this.filePath = finalDir;
         this.fileType = fileType;
@@ -36,9 +39,10 @@ public class Attachment {
 
     }
 
-    public static Attachment of(String originalFilename, String safeName, String finalDir, String fileType) {
+    public static Attachment of(String originalFilename, Long memberCode, String safeName, String finalDir, String fileType) {
         return new Attachment(
                 originalFilename,
+                memberCode,
                 safeName,
                 finalDir,
                 FileType.nameOf(fileType)
