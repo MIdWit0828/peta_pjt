@@ -64,10 +64,13 @@ public class AttController {
     @PostMapping("/atts/upload")
     public ResponseEntity<Void> upload(
             @RequestPart final MultipartFile file,
-            @RequestPart final AttCreateReq req,
+            @RequestParam final String fileType,
+            @RequestParam final Long sessionCode,
+            @RequestParam final Long dayNum,
             @AuthenticationPrincipal UserDetails userDetails
             ) {
         LoginDto loginDto = memberService.findByMemberId(userDetails.getUsername());
+        AttCreateReq req = new AttCreateReq(fileType,sessionCode,dayNum);
         attService.save(file, req, fileDir,loginDto.getMemberCode());
 
 

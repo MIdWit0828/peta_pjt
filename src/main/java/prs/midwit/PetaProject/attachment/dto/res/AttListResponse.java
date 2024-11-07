@@ -17,15 +17,19 @@ public class AttListResponse {
     private Long attCode;
     private Long memberCode;
     private String memberName;
+    private Long sessionCode;
+    private Long dayNum;
     private String originName;
     private String filePath;
     private FileType fileType;
     @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime fileCreateTime;
 
-    public AttListResponse(Long attCode, Long memberCode, String originName, String filePath, FileType fileType, LocalDateTime fileCreateTime) {
+    public AttListResponse(Long attCode, Long memberCode,Long sessionCode, Long dayNum, String originName, String filePath, FileType fileType, LocalDateTime fileCreateTime) {
         this.attCode = attCode;
         this.memberCode = memberCode;
+        this.sessionCode = sessionCode;
+        this.dayNum = dayNum;
         this.originName = originName;
         this.filePath = filePath;
         this.fileType = fileType;
@@ -36,6 +40,8 @@ public class AttListResponse {
         return new AttListResponse(
               att.getAttachmentCode(),
               att.getMemberCode(),
+              att.getSessionCode(),
+              att.getDayNum(),
               att.getOriginName(),
               att.getFilePath(),
               att.getFileType(),
