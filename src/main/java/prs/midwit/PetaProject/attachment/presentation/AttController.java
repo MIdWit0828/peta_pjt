@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import prs.midwit.PetaProject.attachment.dto.AttDto;
+import prs.midwit.PetaProject.attachment.dto.req.AttCreateReq;
 import prs.midwit.PetaProject.attachment.dto.res.AttListResponse;
 import prs.midwit.PetaProject.attachment.service.AttService;
 import prs.midwit.PetaProject.auth.dto.LoginDto;
@@ -62,11 +63,11 @@ public class AttController {
     @PostMapping("/atts/upload")
     public ResponseEntity<Void> upload(
             @RequestPart final MultipartFile file,
-            @RequestPart final String fileType,
+            @RequestPart final AttCreateReq req,
             @AuthenticationPrincipal UserDetails userDetails
             ) {
         LoginDto loginDto = memberService.findByMemberId(userDetails.getUsername());
-        attService.save(file, fileType, fileDir,loginDto.getMemberCode());
+        attService.save(file, req, fileDir,loginDto.getMemberCode());
 
 
         return ResponseEntity.ok().build();

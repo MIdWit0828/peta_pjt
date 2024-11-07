@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import prs.midwit.PetaProject.attachment.domain.entity.Attachment;
 import prs.midwit.PetaProject.attachment.domain.repo.AttRepository;
 import prs.midwit.PetaProject.attachment.dto.AttDto;
+import prs.midwit.PetaProject.attachment.dto.req.AttCreateReq;
 import prs.midwit.PetaProject.attachment.dto.res.AttListResponse;
 import prs.midwit.PetaProject.common.exception.NotFoundException;
 import prs.midwit.PetaProject.common.exception.type.ExceptionCode;
@@ -39,11 +40,11 @@ public class AttService {
         return PageRequest.of(page - 1, 10, Sort.by("fileCreateDt").descending());
     }
 
-    public void save(MultipartFile file, String fileType, String fileDir,Long memberCode) {
+    public void save(MultipartFile file, AttCreateReq req, String fileDir, Long memberCode) {
         log.info("저장소 위치...{}",fileDir);
-        String finalDir = fileDir + fileType + "/";
+        String finalDir = fileDir + req.getFileType() + "/";
         String safeName = getRandomName();
-        Attachment attachment = Attachment.of(file.getOriginalFilename(),memberCode, safeName, finalDir, fileType);
+        Attachment attachment = Attachment.of(file.getOriginalFilename(),memberCode, safeName, finalDir, req.getFileType(),req.getSessionCode(),req.getDayNum());
 
         //디렉토리에 저장
         FileUploadUtils.saveFile(finalDir, safeName, file);

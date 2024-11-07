@@ -1,6 +1,7 @@
 package prs.midwit.PetaProject.attachment.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.apache.bcel.verifier.statics.LONG_Upper;
 import org.hibernate.annotations.CreationTimestamp;
@@ -12,11 +13,14 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "tbl_attachment")
 @Getter
+@AllArgsConstructor
 public class Attachment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long attachmentCode;
     private Long memberCode;
+    private Long sessionCode;
+    private Long dayNum;
     private String originName;
     private String safeName;
     private String filePath;
@@ -27,9 +31,11 @@ public class Attachment {
     @CreationTimestamp
     private LocalDateTime fileCreateDt;
 
-    public Attachment(String originalFilename,Long memberCode, String safeName, String finalDir, FileType fileType) {
+    public Attachment(String originalFilename,Long memberCode,Long sessionCode,Long dayNum, String safeName, String finalDir, FileType fileType) {
         this.originName = originalFilename;
         this.memberCode = memberCode;
+        this.sessionCode = sessionCode;
+        this.dayNum = dayNum;
         this.safeName = safeName;
         this.filePath = finalDir;
         this.fileType = fileType;
@@ -39,10 +45,12 @@ public class Attachment {
 
     }
 
-    public static Attachment of(String originalFilename, Long memberCode, String safeName, String finalDir, String fileType) {
+    public static Attachment of(String originalFilename, Long memberCode, String safeName, String finalDir, String fileType,Long sessionCode,Long dayNum) {
         return new Attachment(
                 originalFilename,
                 memberCode,
+                sessionCode,
+                dayNum,
                 safeName,
                 finalDir,
                 FileType.nameOf(fileType)
