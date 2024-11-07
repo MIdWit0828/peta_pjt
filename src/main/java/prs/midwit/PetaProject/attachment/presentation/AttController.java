@@ -42,6 +42,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Objects;
 
 import static prs.midwit.PetaProject.attachment.util.ImageConverter.*;
@@ -74,15 +75,12 @@ public class AttController {
     }
 
     @GetMapping("/atts")
-    public ResponseEntity<PagingResponse> getList(
-            @RequestParam(defaultValue = "1") final Integer page,
+    public ResponseEntity<List> getList(
             @RequestParam(required = false) final String fileType
     ) {
-        final Page<AttListResponse> pages = attService.findAllList(page, fileType);
-        final PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(pages);
-        final PagingResponse res = PagingResponse.of(pages, pagingButtonInfo);
+        final List<AttListResponse> pages = attService.findAllList(fileType);
 
-        return ResponseEntity.ok(res);
+        return ResponseEntity.ok(pages);
     }
 
     @GetMapping("/atts/download/{fileCode}")

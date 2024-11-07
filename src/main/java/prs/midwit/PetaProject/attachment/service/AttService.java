@@ -21,6 +21,7 @@ import prs.midwit.PetaProject.common.exception.type.ExceptionCode;
 import prs.midwit.PetaProject.common.utils.FileUploadUtils;
 import prs.midwit.PetaProject.member.service.MemberService;
 
+import java.util.List;
 import java.util.UUID;
 
 import static prs.midwit.PetaProject.common.utils.FileUploadUtils.deleteFile;
@@ -55,19 +56,19 @@ public class AttService {
 
     }
 
-    public Page<AttListResponse> findAllList(Integer page, String fileType) {
-        Page<Attachment> atts =null;
+    public List<AttListResponse> findAllList(String fileType) {
+        List<Attachment> atts =null;
         if (fileType == null || fileType == "") {
-            atts = attRepository.findAll(getPageable(page));
+            atts = attRepository.findAll();
         } else {
-            atts = attRepository.findByFileType(getPageable(page),fileType);
+            atts = attRepository.findByFileType(fileType);
         }
-        Page<AttListResponse> listResponses = atts.map(AttListResponse::from);
-        listResponses = listResponses.map(item -> {
+        List<AttListResponse> listResponses = atts.stream().map(AttListResponse::from).toList();
+        listResponses = listResponses.stream().map(item -> {
             String memberName = memberService.getMemberName(item.getMemberCode());
             item.setMemberName(memberName);
             return item;
-        });
+        }).toList();
         return listResponses;
     }
 
