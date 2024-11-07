@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import prs.midwit.PetaProject.attachment.dto.AttDto;
 import prs.midwit.PetaProject.attachment.dto.req.AttCreateReq;
 import prs.midwit.PetaProject.attachment.dto.res.AttListResponse;
+import prs.midwit.PetaProject.attachment.dto.res.AttsRes;
 import prs.midwit.PetaProject.attachment.service.AttService;
 import prs.midwit.PetaProject.auth.dto.LoginDto;
 import prs.midwit.PetaProject.common.exception.BadRequestException;
@@ -78,12 +79,12 @@ public class AttController {
     }
 
     @GetMapping("/atts")
-    public ResponseEntity<List> getList(
+    public ResponseEntity<AttsRes> getList(
             @RequestParam(required = false) final String fileType
     ) {
         final List<AttListResponse> pages = attService.findAllList(fileType);
 
-        return ResponseEntity.ok(pages);
+        return ResponseEntity.ok(new AttsRes(pages));
     }
 
     @GetMapping("/atts/download/{fileCode}")
