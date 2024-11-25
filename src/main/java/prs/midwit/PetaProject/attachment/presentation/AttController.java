@@ -68,10 +68,11 @@ public class AttController {
             @RequestParam final String fileType,
             @RequestParam final Long sessionCode,
             @RequestParam final Long dayNum,
+            @RequestParam final Long ptOrder,
             @AuthenticationPrincipal UserDetails userDetails
             ) {
         LoginDto loginDto = memberService.findByMemberId(userDetails.getUsername());
-        AttCreateReq req = new AttCreateReq(fileType,sessionCode,dayNum);
+        AttCreateReq req = new AttCreateReq(fileType,sessionCode,dayNum,ptOrder);
         attService.save(file, req, fileDir,loginDto.getMemberCode());
 
 

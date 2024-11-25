@@ -9,6 +9,7 @@ CREATE TABLE `tbl_attachment`
     `file_path`    VARCHAR(255) NOT NULL COMMENT '파일 경로',
     `file_type`    VARCHAR(50) NOT NULL COMMENT '파일 구분',
     `file_create_dt` DATETIME NOT NULL COMMENT '파일 업로드 시간',
+    `pt_order` INT COMMENT '발표 순서',
     PRIMARY KEY ( `attachment_code` )
 ) COMMENT = '첨부파일';
 

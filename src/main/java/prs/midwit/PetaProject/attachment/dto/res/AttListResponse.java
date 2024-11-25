@@ -24,8 +24,9 @@ public class AttListResponse {
     private FileType fileType;
     @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime fileCreateTime;
+    private Long ptOrder;
 
-    public AttListResponse(Long attCode, Long memberCode,Long sessionCode, Long dayNum, String originName, String filePath, FileType fileType, LocalDateTime fileCreateTime) {
+    public AttListResponse(Long attCode, Long memberCode,Long sessionCode, Long dayNum, String originName, String filePath, FileType fileType, LocalDateTime fileCreateTime, Long ptOrder) {
         this.attCode = attCode;
         this.memberCode = memberCode;
         this.sessionCode = sessionCode;
@@ -34,6 +35,7 @@ public class AttListResponse {
         this.filePath = filePath;
         this.fileType = fileType;
         this.fileCreateTime = fileCreateTime;
+        this.ptOrder = ptOrder;
     }
 
     public static AttListResponse from(Attachment att) {
@@ -45,7 +47,8 @@ public class AttListResponse {
               att.getOriginName(),
               att.getFilePath(),
               att.getFileType(),
-              att.getFileCreateDt()
+              att.getFileCreateDt(),
+              att.getPtOrder()
         );
     }
 }

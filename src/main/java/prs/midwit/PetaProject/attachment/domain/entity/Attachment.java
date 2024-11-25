@@ -30,6 +30,7 @@ public class Attachment {
 
     @CreationTimestamp
     private LocalDateTime fileCreateDt;
+    private Long ptOrder;
 
     public Attachment(String originalFilename,Long memberCode,Long sessionCode,Long dayNum, String safeName, String finalDir, FileType fileType) {
         this.originName = originalFilename;

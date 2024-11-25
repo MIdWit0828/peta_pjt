@@ -13,5 +13,6 @@ public class AttCreateReq {
     private String fileType;
     private Long sessionCode;
     private Long dayNum;
+    private Long ptOrder;
 
 }
