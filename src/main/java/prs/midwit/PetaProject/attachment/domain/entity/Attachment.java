@@ -32,7 +32,7 @@ public class Attachment {
     private LocalDateTime fileCreateDt;
     private Long ptOrder;
 
-    public Attachment(String originalFilename,Long memberCode,Long sessionCode,Long dayNum, String safeName, String finalDir, FileType fileType) {
+    public Attachment(String originalFilename,Long memberCode,Long sessionCode,Long dayNum, String safeName, String finalDir, FileType fileType,Long ptOrder) {
         this.originName = originalFilename;
         this.memberCode = memberCode;
         this.sessionCode = sessionCode;
@@ -40,13 +40,14 @@ public class Attachment {
         this.safeName = safeName;
         this.filePath = finalDir;
         this.fileType = fileType;
+        this.ptOrder = ptOrder;
     }
 
     public Attachment() {
 
     }
 
-    public static Attachment of(String originalFilename, Long memberCode, String safeName, String finalDir, String fileType,Long sessionCode,Long dayNum) {
+    public static Attachment of(String originalFilename, Long memberCode, String safeName, String finalDir, String fileType,Long sessionCode,Long dayNum,Long ptOrder) {
         return new Attachment(
                 originalFilename,
                 memberCode,
@@ -54,7 +55,8 @@ public class Attachment {
                 dayNum,
                 safeName,
                 finalDir,
-                FileType.nameOf(fileType)
+                FileType.nameOf(fileType),
+                ptOrder
         );
     }
 
