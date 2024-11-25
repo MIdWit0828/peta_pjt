@@ -1,7 +1,7 @@
 package prs.midwit.PetaProject.attachment.domain.type;
 
 public enum FileType {
-    APP, DOC, VID, IMG, PPT,ERR;
+    APP, DOC, VID, IMG, PPT, PDF, ERR;
 
 
     public static FileType nameOf(String name) {
@@ -20,6 +20,9 @@ public enum FileType {
             }
             case "ppt" -> {
                 return FileType.PPT;
+            }
+            case "pdf" -> {
+                return FileType.PDF;
             }
             default -> {
                 return FileType.ERR;
